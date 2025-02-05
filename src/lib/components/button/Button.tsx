@@ -1,13 +1,13 @@
 'use client';
 
-import { MouseEventHandler } from 'react';
+import { CSSProperties, MouseEventHandler } from 'react';
 
 // import './button.css';
 
 interface Props {
   startLabel: string;
   finalLabel: string;
-  style?: any;
+  style?: CSSProperties;
   classes?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   onMouseMove?: MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
@@ -15,7 +15,6 @@ interface Props {
 
 const Button = ({
   startLabel,
-  finalLabel,
   style,
   classes,
   onClick,

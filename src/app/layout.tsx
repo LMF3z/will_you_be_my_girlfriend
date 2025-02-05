@@ -1,14 +1,8 @@
 import type { Metadata } from 'next';
-import { Anton, Outfit } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 
 import './globals.css';
 
-const anton = Anton({
-  weight: '400',
-  // variable: '--font-geist-mono',
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 const outfit = Outfit({
   weight: '500',
   // variable: '--font-geist-mono',

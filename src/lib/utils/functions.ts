@@ -1,6 +1,6 @@
 import screens from '../screens';
 
-export const generateNumBetweenParams = (initial = 0, end = 10) => {
+export const generateNumBetweenParams = () => {
   const numberGenerated = Math.round(Math.random() * 100);
   return numberGenerated;
 };
