@@ -1,101 +1,160 @@
-import Image from "next/image";
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import Input from '../lib/components/inputs/Input';
+import { useModalNameStore } from '../lib/store/modal-name.store';
+import { useNamePlayerStore } from '../lib/store/name-player.store';
+import screens from '../lib/screens';
+import Button from '../lib/components/button/Button';
+import {
+  generateNumBetweenParams,
+  getPositionImages,
+} from '@/lib/utils/functions';
+import Image from 'next/image';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { name } = useNamePlayerStore();
+  const { handleOpenModal, isOpen } = useModalNameStore();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [positionBtnNo, setPositionBtnNo] = useState({
+    top: '40%',
+    left: '30%',
+  });
+  const [widthActualScreen, setWidthActualScreen] = useState<number>(0);
+  const [accept, setAccept] = useState<boolean>(false);
+  const [numImages, _] = useState<number[]>(
+    [...Array(100 - 0).keys()].map((x) => x + 100)
+  );
+
+  useEffect(() => {
+    const screen = window.screen.availWidth;
+
+    setWidthActualScreen(screen);
+
+    if (screen < screens.mobile) {
+      setPositionBtnNo({
+        ...positionBtnNo,
+        left: '10%',
+      });
+    } else {
+      setPositionBtnNo({
+        ...positionBtnNo,
+        left: '30%',
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (name === '') {
+      handleOpenModal(true);
+    }
+  }, [name]);
+
+  const handleHover = (e: any) => {
+    const generatedTop = generateNumBetweenParams();
+    const generatedLeft = generateNumBetweenParams();
+
+    if (
+      widthActualScreen < screens.mobile &&
+      generatedTop < 70 &&
+      generatedLeft < 70
+    ) {
+      setPositionBtnNo({
+        top: `${String(generatedTop)}%`,
+        left: `${String(generatedLeft)}%`,
+      });
+    } else if (
+      widthActualScreen > screens.mobile &&
+      generatedTop < 80 &&
+      generatedLeft < 80
+    ) {
+      setPositionBtnNo({
+        top: `${String(generatedTop)}%`,
+        left: `${String(generatedLeft)}%`,
+      });
+    } else {
+      handleHover(e);
+    }
+  };
+
+  const getCurrentPositionImages = () => {
+    const objPos = getPositionImages(widthActualScreen);
+
+    if (objPos !== null) {
+      return objPos;
+    } else {
+      getCurrentPositionImages();
+    }
+  };
+
+  const handleClickYes = () => {
+    setAccept(true);
+
+    setTimeout(() => {
+      setAccept(false);
+    }, 20000);
+  };
+
+  return (
+    <div className='w-full h-screen flex flex-col justify-between items-center px-5 py-5 gap-5'>
+      {/* modal for name player */}
+      {isOpen && (
+        <div className='absolute z-50 top-0 left-0 w-full h-full bg-blue-950 flex justify-center items-center'>
+          <Input />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      )}
+
+      <h1>Would do you like get out with me? {name}</h1>
+
+      <div className='w-full h-full'>
+        <Button
+          startLabel='No, I pass.'
+          finalLabel='No, I pass.'
+          style={positionBtnNo}
+          onMouseMove={handleHover}
+          classes='z-10'
+        />
+        <Button
+          startLabel='lets go.'
+          finalLabel='Si, me gustaria.'
+          style={{
+            top: '40%',
+            right: '10%',
+          }}
+          onClick={handleClickYes}
+        />
+      </div>
+
+      {accept && (
+        <div className='z-50'>
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            src={'/ednamoda.gif'}
+            alt='logo'
+            width={500}
+            height={500}
+            className='z-50'
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </div>
+      )}
+
+      {accept
+        ? numImages.map((_, index) => {
+            const styles = getCurrentPositionImages();
+
+            return (
+              <Image
+                key={index}
+                src={'/success.gif'}
+                alt='logo'
+                width={300}
+                height={300}
+                className='absolute top-[40%] right-[30%] w-[250px] h-[250px] z-40'
+                style={styles}
+              />
+            );
+          })
+        : null}
     </div>
   );
 }

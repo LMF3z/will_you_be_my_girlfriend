@@ -15,7 +15,8 @@
 }
 
 body {
+  @apply bg-blue-950;
   color: var(--foreground);
-  background: var(--background);
+  /* background: var(--background); */
   font-family: Arial, Helvetica, sans-serif;
 }
