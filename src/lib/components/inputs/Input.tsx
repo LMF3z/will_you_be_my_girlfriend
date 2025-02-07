@@ -12,13 +12,21 @@ const Input = () => {
   const handleClickMobile = (
     e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
   ) => {
-    if (['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)) {
+    if (
+      ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(
+        name.toLowerCase()
+      )
+    ) {
       handleOpenModal(false);
       console.log(e);
       return;
     }
 
-    if (!['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)) {
+    if (
+      !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(
+        name.toLowerCase()
+      )
+    ) {
       alert('Ingresa tu nombre real.');
       return;
     }
