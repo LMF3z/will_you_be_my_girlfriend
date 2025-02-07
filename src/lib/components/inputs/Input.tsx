@@ -1,5 +1,6 @@
 'use client';
 
+import { KeyboardEvent, MouseEvent } from 'react';
 import { useModalNameStore } from '../../store/modal-name.store';
 import { useNamePlayerStore } from '../../store/name-player.store';
 import './input.css';
@@ -7,6 +8,38 @@ import './input.css';
 const Input = () => {
   const { name, handleChange } = useNamePlayerStore();
   const { handleOpenModal } = useModalNameStore();
+
+  const handleClickMobile = (
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    if (['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)) {
+      handleOpenModal(false);
+      console.log(e);
+      return;
+    }
+
+    if (!['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)) {
+      alert('Ingresa tu nombre real.');
+      return;
+    }
+  };
+
+  const handleClick = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      e.code === 'Enter' &&
+      ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
+    ) {
+      handleOpenModal(false);
+      return;
+    }
+
+    if (
+      e.code === 'Enter' &&
+      !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
+    ) {
+      alert('Ingresa tu nombre real.');
+    }
+  };
 
   return (
     <div className='wave-group'>
@@ -18,23 +51,14 @@ const Input = () => {
         onChange={(e) => {
           handleChange(e.target.value);
         }}
-        onKeyUp={(e) => {
-          if (
-            e.code === 'Enter' &&
-            ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
-          ) {
-            handleOpenModal(false);
-            return;
-          }
-
-          if (
-            e.code === 'Enter' &&
-            !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
-          ) {
-            alert('Enter your real name');
-          }
-        }}
+        onKeyUp={handleClick}
       />
+      <button
+        onClick={handleClickMobile}
+        className='lg:hidden w-[200px] mt-3 p-3 bg-slate-700 border border-blue-950 text-white'
+      >
+        Ok
+      </button>
       <span className='bar'></span>
       <label className='label'>
         <span className='label-char' style={{ '--index': 0 }}>
