@@ -19,11 +19,18 @@ const Input = () => {
           handleChange(e.target.value);
         }}
         onKeyUp={(e) => {
-          if (e.code === 'Enter' && name.toLowerCase() === 'moises') {
+          if (
+            e.code === 'Enter' &&
+            ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
+          ) {
             handleOpenModal(false);
+            return;
           }
 
-          if (e.code === 'Enter' && name.toLowerCase() !== 'moises') {
+          if (
+            e.code === 'Enter' &&
+            !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
+          ) {
             alert('Enter your real name');
           }
         }}

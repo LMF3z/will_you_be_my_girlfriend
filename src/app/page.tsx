@@ -12,6 +12,7 @@ import {
   getPositionImages,
 } from '@/lib/utils/functions';
 import Image from 'next/image';
+import { handleSendEmail } from '@/lib/utils/sned-email';
 
 export default function Home() {
   const { name } = useNamePlayerStore();
@@ -21,7 +22,12 @@ export default function Home() {
     top: '40%',
     left: '30%',
   });
+  const [positionScapeImage, setPositionScapeImage] = useState({
+    top: '40%',
+    left: '30%',
+  });
   const [widthActualScreen, setWidthActualScreen] = useState<number>(0);
+  const [showScapeImage, setShowScapeImage] = useState<boolean>(false);
   const [accept, setAccept] = useState<boolean>(false);
   const [numImages, _] = useState<number[]>(
     [...Array(100 - 0).keys()].map((x) => x + 100)
@@ -64,6 +70,11 @@ export default function Home() {
         top: `${String(generatedTop)}%`,
         left: `${String(generatedLeft)}%`,
       });
+      setPositionScapeImage({
+        top: `${String(generatedTop)}%`,
+        left: `${String(generatedLeft)}%`,
+      });
+      setShowScapeImage(true);
     } else if (
       widthActualScreen > screens.mobile &&
       generatedTop < 80 &&
@@ -73,9 +84,18 @@ export default function Home() {
         top: `${String(generatedTop)}%`,
         left: `${String(generatedLeft)}%`,
       });
+      setPositionScapeImage({
+        top: `${String(generatedTop)}%`,
+        left: `${String(generatedLeft)}%`,
+      });
+      setShowScapeImage(true);
     } else {
       handleHover(e);
     }
+
+    setTimeout(() => {
+      setShowScapeImage(false);
+    }, 1000);
   };
 
   const getCurrentPositionImages = () => {
@@ -90,6 +110,7 @@ export default function Home() {
 
   const handleClickYes = () => {
     setAccept(true);
+    handleSendEmail(name);
 
     setTimeout(() => {
       setAccept(false);
@@ -105,19 +126,19 @@ export default function Home() {
         </div>
       )}
 
-      <h1>Would do you like get out with me? {name}</h1>
+      <h1>¿Te gistaría ir por un café conmigo? {name}</h1>
 
       <div className='w-full h-full'>
         <Button
-          startLabel='No, I pass.'
-          finalLabel='No, I pass.'
+          startLabel='No, paso.'
+          finalLabel='No, I pass. 2'
           style={positionBtnNo}
           onMouseMove={handleHover}
           classes='z-10'
         />
         <Button
-          startLabel='lets go.'
-          finalLabel='Si, me gustaria.'
+          startLabel='Si, me gustaria.'
+          finalLabel='Si, me gustaria. 2'
           style={{
             top: '40%',
             right: '10%',
@@ -125,6 +146,19 @@ export default function Home() {
           onClick={handleClickYes}
         />
       </div>
+
+      {showScapeImage && (
+        <div className='z-50'>
+          <Image
+            src={'/venellope.gif'}
+            alt='logo'
+            width={350}
+            height={350}
+            className='z-50 absolute rounded-lg'
+            style={positionScapeImage}
+          />
+        </div>
+      )}
 
       {accept && (
         <div className='z-50'>
