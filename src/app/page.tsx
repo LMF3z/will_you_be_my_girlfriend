@@ -30,7 +30,7 @@ export default function Home() {
   const [showScapeImage, setShowScapeImage] = useState<boolean>(false);
   const [accept, setAccept] = useState<boolean>(false);
   const [numImages, _] = useState<number[]>(
-    [...Array(100 - 0).keys()].map((x) => x + 100)
+    [...Array(100 - 0).keys()].map((x) => x + 100),
   );
 
   useEffect(() => {
@@ -150,7 +150,7 @@ export default function Home() {
       {showScapeImage && (
         <div className='z-50'>
           <Image
-            src={'/venellope.gif'}
+            src={'/pandas.gif'}
             alt='logo'
             width={350}
             height={350}

@@ -5,46 +5,41 @@ import { useModalNameStore } from '../../store/modal-name.store';
 import { useNamePlayerStore } from '../../store/name-player.store';
 import './input.css';
 
+const namesInputs = [
+  'estefany',
+  'esthefany',
+  'estefanhy',
+  'estefhany',
+  'Maria',
+  'maria',
+];
+
 const Input = () => {
   const { name, handleChange } = useNamePlayerStore();
   const { handleOpenModal } = useModalNameStore();
 
   const handleClickMobile = (
-    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+    e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>,
   ) => {
-    if (
-      ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(
-        name.toLowerCase()
-      )
-    ) {
+    if (namesInputs.includes(name.toLowerCase())) {
       handleOpenModal(false);
       console.log(e);
       return;
     }
 
-    if (
-      !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(
-        name.toLowerCase()
-      )
-    ) {
+    if (!namesInputs.includes(name.toLowerCase())) {
       alert('Ingresa tu nombre real.');
       return;
     }
   };
 
   const handleClick = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (
-      e.code === 'Enter' &&
-      ['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
-    ) {
+    if (e.code === 'Enter' && namesInputs.includes(name)) {
       handleOpenModal(false);
       return;
     }
 
-    if (
-      e.code === 'Enter' &&
-      !['estefany', 'esthefany', 'estefanhy', 'estefhany'].includes(name)
-    ) {
+    if (e.code === 'Enter' && !namesInputs.includes(name)) {
       alert('Ingresa tu nombre real.');
     }
   };
